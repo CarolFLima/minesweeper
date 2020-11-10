@@ -1,4 +1,5 @@
 import random
+import time
 
 class Game:
     def __init__(self, difficulty):
@@ -6,9 +7,9 @@ class Game:
         if difficulty == 'EASY':
             self.no_bombs = 10
             self.field_size = (9, 9)
-        elif difficulty == 'MEDIUM':
-            self.no_bombs = 40
-            self.field_size = (16, 16)
+        elif difficulty == 'DEBUG':
+            self.no_bombs = 2
+            self.field_size = (3, 3)
         self.status = 0
 
     def generate_field(self):
@@ -63,6 +64,7 @@ class Game:
             self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
         else:
             self.status = 1
+            self.player_field[x_pos][y_pos] = 9
             print('YOU\'VE HIT A BOMB')
 
     def dig_adjacent_zeros(self, x_pos, y_pos):
@@ -89,18 +91,23 @@ class Game:
             self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
 
     def solver(self):
-        pass
+        
+        while game.status == 0:
+            shot = [random.randint(0, self.field_size[0]-1), random.randint(0, self.field_size[1]-1)]
+            game.dig(shot[0], shot[1])
+            game.print_field()
+            time.sleep(5)
+        
 
     def print_field(self):
-        for row in self.player_field:
-            print(" ".join(str(cell) for cell in row))
+        if self.status == 0:
+            for row in self.player_field:
+                print(" ".join(str(cell) for cell in row))
+        else:
+            for row in self.field:
+                print(" ".join(str(cell) for cell in row))
             
 
-game = Game('EASY')
+game = Game('DEBUG')
 game.generate_field()
-game.print_field()
-
-while game.status == 0:
-    x, y = map(int, input().split())
-    game.dig(x, y)
-    game.print_field()
+game.solver()
