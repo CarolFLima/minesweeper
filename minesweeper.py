@@ -66,25 +66,27 @@ class Game:
             print('YOU\'VE HIT A BOMB')
 
     def dig_adjacent_zeros(self, x_pos, y_pos):
-        if self.field[x_pos][y_pos] == 0:
+        if self.field[x_pos][y_pos] == 0 and self.player_field[x_pos][y_pos] == '-':
             self.player_field[x_pos][y_pos] = 0
             
-            if x_pos > 0 and self.field[x_pos-1][y_pos] == 0 and self.player_field[x_pos-1][y_pos] == '-':
+            if x_pos > 0:
                 self.dig_adjacent_zeros(x_pos-1, y_pos)
-            if y_pos < self.field_size[1]-1 and self.field[x_pos][y_pos+1] == 0 and self.player_field[x_pos][y_pos+1] == '-':
+            if y_pos < self.field_size[1]-1:
                 self.dig_adjacent_zeros(x_pos, y_pos+1)
-            if x_pos < self.field_size[0]-1 and self.field[x_pos+1][y_pos] == 0 and self.player_field[x_pos+1][y_pos] == '-':
+            if x_pos < self.field_size[0]-1:
                 self.dig_adjacent_zeros(x_pos+1, y_pos)
-            if y_pos > 0 and self.field[x_pos][y_pos-1] == 0 and self.player_field[x_pos][y_pos-1] == '-': 
+            if y_pos > 0 and self.field[x_pos][y_pos-1] == 0: 
                 self.dig_adjacent_zeros(x_pos, y_pos-1)
-            if x_pos > 0 and y_pos > 0 and self.field[x_pos-1][y_pos-1] == 0 and self.player_field[x_pos-1][y_pos-1] == '-':
+            if x_pos > 0 and y_pos > 0:
                 self.dig_adjacent_zeros(x_pos-1, y_pos-1)
-            if x_pos > 0 and y_pos < self.field_size[1]-1 and self.field[x_pos-1][y_pos+1] == 0 and self.player_field[x_pos-1][y_pos+1] == '-':
+            if x_pos > 0 and y_pos < self.field_size[1]-1:
                 self.dig_adjacent_zeros(x_pos-1, y_pos+1)
-            if x_pos < self.field_size[0]-1 and y_pos < self.field_size[1]-1 and self.field[x_pos+1][y_pos+1] == 0 and self.player_field[x_pos+1][y_pos+1] == '-':
+            if x_pos < self.field_size[0]-1 and y_pos < self.field_size[1]-1:
                 self.dig_adjacent_zeros(x_pos+1, y_pos+1)
-            if x_pos < self.field_size[0]-1 and y_pos > 0 and self.field[x_pos+1][y_pos-1] == 0 and self.player_field[x_pos+1][y_pos-1] == '-':
+            if x_pos < self.field_size[0]-1 and y_pos > 0:
                 self.dig_adjacent_zeros(x_pos+1, y_pos-1)
+        elif self.field[x_pos][y_pos] != 9:
+            self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
 
     def solver(self):
         pass
@@ -102,4 +104,3 @@ while game.status == 0:
     x, y = map(int, input().split())
     game.dig(x, y)
     game.print_field()
-    
