@@ -11,6 +11,8 @@ class Game:
             self.no_bombs = 2
             self.field_size = (3, 3)
         self.status = 0
+        self.revealed_values = []
+        self.generate_field()
 
     def generate_field(self):
         self.field = [[0 for row in range(self.field_size[0])] for column in range(self.field_size[1])]
@@ -58,6 +60,9 @@ class Game:
                     self.field[row][col] += 1
 
     def dig(self, x_pos, y_pos):
+        self.revealed_values = []
+        self.revealed_values.append([x_pos, y_pos])
+
         if self.field[x_pos][y_pos] == 0:
             self.dig_adjacent_zeros(x_pos, y_pos)
         elif self.field[x_pos][y_pos] != 9:
@@ -70,7 +75,7 @@ class Game:
     def dig_adjacent_zeros(self, x_pos, y_pos):
         if self.field[x_pos][y_pos] == 0 and self.player_field[x_pos][y_pos] == -1:
             self.player_field[x_pos][y_pos] = 0
-            
+
             if x_pos > 0:
                 self.dig_adjacent_zeros(x_pos-1, y_pos)
             if y_pos < self.field_size[1]-1:
@@ -89,6 +94,7 @@ class Game:
                 self.dig_adjacent_zeros(x_pos+1, y_pos-1)
         elif self.field[x_pos][y_pos] != 9:
             self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
+            self.revealed_values.append([x_pos, y_pos])
 
     def print_field(self):
         if self.status == 0:
@@ -118,8 +124,8 @@ class Game:
     def inspect_neighbors(self, x_pos, y_pos):
         pass
 
-game = Game('DEBUG')
-game.generate_field()
-game.solver()
+# game = Game('DEBUG')
+# game.generate_field()
+# game.solver()
 
 
