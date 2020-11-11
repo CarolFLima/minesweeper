@@ -14,7 +14,7 @@ class Game:
 
     def generate_field(self):
         self.field = [[0 for row in range(self.field_size[0])] for column in range(self.field_size[1])]
-        self.player_field = [['-' for row in range(self.field_size[0])] for column in range(self.field_size[1])]
+        self.player_field = [[-1 for row in range(self.field_size[0])] for column in range(self.field_size[1])]
         for _ in range(self.no_bombs):
             x = random.randint(0, self.field_size[0]-1)
             y = random.randint(0, self.field_size[1]-1)
@@ -68,7 +68,7 @@ class Game:
             print('YOU\'VE HIT A BOMB')
 
     def dig_adjacent_zeros(self, x_pos, y_pos):
-        if self.field[x_pos][y_pos] == 0 and self.player_field[x_pos][y_pos] == '-':
+        if self.field[x_pos][y_pos] == 0 and self.player_field[x_pos][y_pos] == -1:
             self.player_field[x_pos][y_pos] = 0
             
             if x_pos > 0:
@@ -90,15 +90,6 @@ class Game:
         elif self.field[x_pos][y_pos] != 9:
             self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
 
-    def solver(self):
-        
-        while game.status == 0:
-            shot = [random.randint(0, self.field_size[0]-1), random.randint(0, self.field_size[1]-1)]
-            game.dig(shot[0], shot[1])
-            game.print_field()
-            time.sleep(5)
-        
-
     def print_field(self):
         if self.status == 0:
             for row in self.player_field:
@@ -106,8 +97,29 @@ class Game:
         else:
             for row in self.field:
                 print(" ".join(str(cell) for cell in row))
-            
+
+    def solver(self):
+        x_pos = 0
+        y_pos = 0
+        counter = 0
+        while max(max(self.player_field))<9:
+            x_pos = counter//3
+            y_pos = counter%3
+            if self.player_field[x_pos][y_pos]>0: 
+                # self.dig(x_pos, y_pos)
+                # self.print_field()
+                self.inspect_neighbors(x_pos, y_pos)
+            if counter == 6:
+                counter = 0
+            else:
+                counter += 1
+            time.sleep(5)
+
+    def inspect_neighbors(self, x_pos, y_pos):
+        pass
 
 game = Game('DEBUG')
 game.generate_field()
 game.solver()
+
+
