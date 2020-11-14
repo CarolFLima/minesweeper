@@ -72,6 +72,9 @@ class Game:
             self.player_field[x_pos][y_pos] = 9
             print('YOU\'VE HIT A BOMB')
 
+    def flag_bomb(self, x_pos, y_pos):
+        self.player_field[x_pos][y_pos] = 10
+
     def dig_adjacent_zeros(self, x_pos, y_pos):
         if self.field[x_pos][y_pos] == 0 and self.player_field[x_pos][y_pos] == -1:
             self.player_field[x_pos][y_pos] = 0
@@ -92,7 +95,7 @@ class Game:
                 self.dig_adjacent_zeros(x_pos+1, y_pos+1)
             if x_pos < self.field_size[0]-1 and y_pos > 0:
                 self.dig_adjacent_zeros(x_pos+1, y_pos-1)
-        elif self.field[x_pos][y_pos] != 9:
+        elif self.field[x_pos][y_pos] < 9:
             self.player_field[x_pos][y_pos] = self.field[x_pos][y_pos]
             self.revealed_values.append([x_pos, y_pos])
 
@@ -103,29 +106,4 @@ class Game:
         else:
             for row in self.field:
                 print(" ".join(str(cell) for cell in row))
-
-    def solver(self):
-        x_pos = 0
-        y_pos = 0
-        counter = 0
-        while max(max(self.player_field))<9:
-            x_pos = counter//3
-            y_pos = counter%3
-            if self.player_field[x_pos][y_pos]>0: 
-                # self.dig(x_pos, y_pos)
-                # self.print_field()
-                self.inspect_neighbors(x_pos, y_pos)
-            if counter == 6:
-                counter = 0
-            else:
-                counter += 1
-            time.sleep(5)
-
-    def inspect_neighbors(self, x_pos, y_pos):
-        pass
-
-# game = Game('DEBUG')
-# game.generate_field()
-# game.solver()
-
 
